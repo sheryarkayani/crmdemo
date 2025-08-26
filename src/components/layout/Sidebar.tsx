@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Search, Plus, ChevronRight, Lock, Eye, Edit3, LogOut, Home, Users, Calendar, BarChart3, Bell, Folder, User, ChevronDown, Settings } from 'lucide-react';
+import { Star, Search, Plus, ChevronRight, Lock, Eye, LogOut, Home, Calendar, BarChart3, Bell, Folder, User, ChevronDown, Settings, LayoutDashboard, FileText, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useBoardContext } from '@/context/BoardContext';
 import { useAuth } from '@/context/AuthContext';
 import { useUserContext } from '@/context/UserContext';
-import CreateBoardDialog from '@/components/dialogs/CreateBoardDialog';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
@@ -42,8 +42,6 @@ const Sidebar = () => {
 
   const getAccessIcon = (level: string) => {
     switch (level) {
-      case 'edit':
-        return <Edit3 className="w-3 h-3 text-green-600" />;
       case 'view':
         return <Eye className="w-3 h-3 text-blue-600" />;
       default:
@@ -82,11 +80,18 @@ const Sidebar = () => {
       onClick: () => navigate('/my-works')
     },
     { 
-      id: 'team', 
-      label: 'Team', 
-      icon: Users, 
-      active: false,
-      onClick: () => {} // TODO: Implement team page
+      id: 'proposals', 
+      label: 'Proposal Quotation', 
+      icon: FileText, 
+      active: location.pathname === '/proposals',
+      onClick: () => navigate('/proposals')
+    },
+    { 
+      id: 'training', 
+      label: 'Training', 
+      icon: GraduationCap, 
+      active: location.pathname === '/training',
+      onClick: () => navigate('/training')
     },
     { 
       id: 'notifications', 
@@ -161,14 +166,13 @@ const Sidebar = () => {
 
       <Separator className="mx-3" />
 
-      {/* Main Section Header */}
+      {/* Boards Section Header */}
       <div className="px-3 py-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Folder className="w-4 h-4 text-gray-600" />
-            <span className="text-sm font-semibold text-gray-700">Main</span>
+            <LayoutDashboard className="w-4 h-4 text-gray-600" />
+            <span className="text-sm font-semibold text-gray-700">Boards</span>
           </div>
-          <CreateBoardDialog />
         </div>
       </div>
 

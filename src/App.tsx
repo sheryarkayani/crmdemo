@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import EmailIntegration from "./pages/EmailIntegration";
 import MyWorks from "./pages/MyWorks";
+import Proposals from "./pages/Proposals";
+import Training from "./pages/Training";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import { GmailAuthCallback } from "@/components/GmailAuthCallback";
 
@@ -64,6 +66,20 @@ const App = () => (
                     <Route path="/my-works" element={
                       <PrivateRoute>
                         <MyWorks />
+                      </PrivateRoute>
+                    } />
+                    
+                    {/* Proposals Route */}
+                    <Route path="/proposals" element={
+                      <PrivateRoute>
+                        <Proposals />
+                      </PrivateRoute>
+                    } />
+                    
+                    {/* Training Route */}
+                    <Route path="/training" element={
+                      <PrivateRoute>
+                        <Training />
                       </PrivateRoute>
                     } />
                     

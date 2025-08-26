@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import { Star, MoreHorizontal, Users, User, ChevronDown, Settings, Clock, Trash2, Shield, LogOut } from 'lucide-react';
+import React from 'react';
+import { Star, Users, User, ChevronDown, Clock, Shield, LogOut, Plus, Edit, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
 import { useBoardContext } from '@/context/BoardContext';
 import { useAuth } from '@/context/AuthContext';
 import { useActivity } from '@/context/ActivityContext';
-import CreateBoardDialog from '@/components/dialogs/CreateBoardDialog';
-import ActivityLog from '@/components/activity/ActivityLog';
 
 const Header = () => {
-  const { currentBoard, currentView, setCurrentView, deleteBoard, canEditCurrentBoard } = useBoardContext();
+  const { currentBoard, currentView, setCurrentView, canEditCurrentBoard } = useBoardContext();
   const { user, signOut } = useAuth();
   const { getActivitiesForBoard } = useActivity();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [boardTitle, setBoardTitle] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
 
   if (!currentBoard || !user) return null;
 
@@ -26,20 +18,6 @@ const Header = () => {
   
   // Get activities for the current board
   const boardActivities = currentBoard ? getActivitiesForBoard(currentBoard.id) : [];
-
-  const handleDeleteBoard = async () => {
-    if (!hasEditAccess) return;
-    
-    setIsDeleting(true);
-    try {
-      await deleteBoard(currentBoard.id);
-      setIsDeleteDialogOpen(false);
-    } catch (error) {
-      console.error('Failed to delete board:', error);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -146,7 +124,95 @@ const Header = () => {
                   <p className="text-sm text-muted-foreground">Latest updates on this board</p>
                 </div>
                 <div className="max-h-80 overflow-y-auto apple-scrollbar">
-                  <ActivityLog activities={boardActivities} />
+                  {boardActivities.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                      <Clock className="w-12 h-12 text-muted-foreground/40 mb-3" />
+                      <h4 className="font-medium text-foreground mb-1">No recent activity</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Activity will appear here when team members interact with this board
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="p-4 space-y-3">
+                      {boardActivities.slice(0, 6).map((activity, index) => {
+                        const getActivityIcon = (type: string) => {
+                          switch (type) {
+                            case 'task_created':
+                              return <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><Plus className="w-4 h-4 text-green-600 dark:text-green-400" /></div>;
+                            case 'task_updated':
+                              return <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><Edit className="w-4 h-4 text-blue-600 dark:text-blue-400" /></div>;
+                            case 'task_completed':
+                              return <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" /></div>;
+                            default:
+                              return <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-900/30 flex items-center justify-center"><Clock className="w-4 h-4 text-gray-600 dark:text-gray-400" /></div>;
+                          }
+                        };
+
+                        const getActivityMessage = (activity: any) => {
+                          switch (activity.type) {
+                            case 'task_created':
+                              return `New task "${activity.task_title || 'Untitled'}" was created`;
+                            case 'task_updated':
+                              return `Task "${activity.task_title || 'Untitled'}" was updated`;
+                            case 'task_completed':
+                              return `Task "${activity.task_title || 'Untitled'}" was completed`;
+                            default:
+                              return 'Activity recorded';
+                          }
+                        };
+
+                        const formatTimeAgo = (timestamp: string) => {
+                          const now = new Date();
+                          const time = new Date(timestamp);
+                          const diffInMs = now.getTime() - time.getTime();
+                          const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+                          const diffInHours = Math.floor(diffInMinutes / 60);
+                          const diffInDays = Math.floor(diffInHours / 24);
+
+                          if (diffInMinutes < 1) return 'Just now';
+                          if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+                          if (diffInHours < 24) return `${diffInHours}h ago`;
+                          if (diffInDays < 7) return `${diffInDays}d ago`;
+                          return time.toLocaleDateString();
+                        };
+
+                        return (
+                          <div
+                            key={activity.id}
+                            className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors border border-transparent hover:border-border/20"
+                          >
+                            <div className="flex-shrink-0 mt-0.5">
+                              {getActivityIcon(activity.type)}
+                            </div>
+                            
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm text-foreground font-medium mb-1 leading-relaxed">
+                                {getActivityMessage(activity)}
+                              </p>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground">
+                                  {formatTimeAgo(activity.timestamp)}
+                                </span>
+                                {activity.user_id && (
+                                  <span className="text-xs px-2 py-1 bg-muted rounded-full text-muted-foreground">
+                                    User {activity.user_id.slice(0, 8)}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      
+                      {boardActivities.length > 6 && (
+                        <div className="text-center pt-2 border-t border-border/10">
+                          <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                            View all {boardActivities.length} activities
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </PopoverContent>
             </Popover>
@@ -160,63 +226,6 @@ const Header = () => {
               <Users className="w-4 h-4 mr-2" />
               Team
             </Button>
-
-            {/* Create Board Dialog - Only show if user can create boards */}
-            {hasEditAccess && <CreateBoardDialog />}
-
-            {/* Settings Popover */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="interactive-apple apple-card border-border/20 hover:border-border/40 backdrop-blur-sm"
-                >
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-64 apple-card border-border/10" align="end">
-                <div className="space-y-1">
-                  <div className="p-3 border-b border-border/10">
-                    <h4 className="font-medium text-foreground">Board Actions</h4>
-        </div>
-
-                  {hasEditAccess && (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-full justify-start hover:bg-muted/50 clean-transition rounded-lg"
-                      onClick={() => setIsDialogOpen(true)}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Board Settings
-                    </Button>
-                  )}
-                  
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full justify-start hover:bg-muted/50 clean-transition rounded-lg"
-                    disabled={!hasEditAccess}
-                  >
-                    <Star className="w-4 h-4 mr-2" />
-                    {currentBoard.is_starred ? 'Remove from favorites' : 'Add to favorites'}
-                  </Button>
-                  
-                  {hasEditAccess && (
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 clean-transition rounded-lg"
-                      onClick={() => setIsDeleteDialogOpen(true)}
-                    >
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete Board
-                    </Button>
-                  )}
-                </div>
-              </PopoverContent>
-            </Popover>
 
             {/* Profile Button with User Info */}
             <Popover>
@@ -240,15 +249,6 @@ const Header = () => {
                     <Badge className="text-xs mt-2">{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</Badge>
                   </div>
                   
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full justify-start hover:bg-muted/50 clean-transition rounded-lg"
-                  >
-                    <Settings className="w-4 h-4 mr-2" />
-                    Profile Settings
-                  </Button>
-                  
           <Button
             variant="ghost"
             size="sm"
@@ -265,102 +265,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Board Settings Dialog - Only show if user has edit access */}
-      {hasEditAccess && (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="apple-card border-border/10 max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-gradient-apple text-xl font-semibold">Board Settings</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-foreground">Board Title</label>
-                <Input
-                  value={boardTitle || currentBoard.title}
-                  onChange={(e) => setBoardTitle(e.target.value)}
-                  className="mt-1 premium-focus border-border/20"
-                  placeholder="Enter board title"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium text-foreground">Description</label>
-                <Input
-                  defaultValue={currentBoard.description || ''}
-                  className="mt-1 premium-focus border-border/20"
-                  placeholder="Enter board description"
-                />
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsDialogOpen(false)}
-                  className="premium-focus border-border/20"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={() => setIsDialogOpen(false)}
-                  className="premium-button hover:shadow-apple-md"
-                >
-                  Save Changes
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
-
-      {/* Delete Board Confirmation Dialog - Only show if user has edit access */}
-      {hasEditAccess && (
-        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogContent className="apple-card border-border/10 max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-xl font-semibold text-destructive flex items-center gap-2">
-                <Trash2 className="w-5 h-5" />
-                Delete Board
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
-                <p className="text-sm text-foreground font-medium mb-2">
-                  Are you sure you want to delete "{currentBoard.title}"?
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  This action cannot be undone. All tasks, groups, and data associated with this board will be permanently deleted.
-                </p>
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setIsDeleteDialogOpen(false)}
-                  className="premium-focus border-border/20"
-                  disabled={isDeleting}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  variant="destructive"
-                  onClick={handleDeleteBoard}
-                  disabled={isDeleting}
-                  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
-                >
-                  {isDeleting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 className="w-4 h-4 mr-2" />
-                      Delete Board
-                    </>
-                  )}
-                </Button>
-      </div>
-    </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </header>
   );
 };
