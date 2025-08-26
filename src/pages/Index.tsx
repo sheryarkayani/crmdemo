@@ -27,7 +27,7 @@ const MainContent = () => {
   };
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-red-50/30 to-orange-50/30 dark:from-slate-900 dark:via-red-950/30 dark:to-orange-950/30">
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />

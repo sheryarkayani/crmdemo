@@ -106,35 +106,41 @@ const Sidebar = () => {
   if (!user) return null;
 
   return (
-    <div className="w-64 h-full bg-white border-r border-gray-200 flex flex-col">
+    <div className="w-64 h-full bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 border-r border-slate-200/60 dark:border-slate-700/60 flex flex-col shadow-xl">
       {/* Header */}
-      <div className="p-4 border-b border-gray-100">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">M</span>
-          </div>
-          <div>
-            <h2 className="font-semibold text-gray-900">Monday Board</h2>
-            <p className="text-xs text-gray-500">Project Management</p>
+      <div className="p-6 border-b border-slate-200/60 dark:border-slate-700/60 bg-gradient-to-r from-red-50/50 to-orange-50/50 dark:from-red-950/20 dark:to-orange-950/20">
+        <div className="flex items-center gap-4 mb-6">
+          <img 
+            src="/Transparent%20Logo.png" 
+            alt="DRAVOX" 
+            className="h-10 w-auto object-contain flex-shrink-0"
+          />
+          <div className="flex-1 min-w-0">
+            <h2 className="font-bold text-slate-900 dark:text-slate-100 text-lg leading-tight">
+              Dravox
+            </h2>
+            <h3 className="font-semibold text-slate-700 dark:text-slate-300 text-sm leading-tight">
+              ERP/CRM
+            </h3>
           </div>
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
           <Input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-9 bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-500 transition-colors"
+            className="pl-10 h-10 bg-white/70 dark:bg-slate-800/70 border-slate-200 dark:border-slate-700 focus:bg-white dark:focus:bg-slate-800 focus:border-red-500 dark:focus:border-red-400 transition-all duration-200 rounded-xl shadow-sm"
           />
         </div>
       </div>
 
       {/* Navigation Menu */}
-      <div className="p-3">
-        <div className="space-y-1">
+      <div className="p-4">
+        <div className="space-y-2">
           {navigationItems.map((item) => {
             const IconComponent = item.icon;
             return (
@@ -142,19 +148,22 @@ const Sidebar = () => {
                 key={item.id}
                 onClick={item.onClick}
                 className={`
-                  flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors
+                  group flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 relative overflow-hidden
                   ${item.active 
-                    ? 'bg-blue-50 text-blue-700' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-800/30 text-red-700 dark:text-red-300 shadow-md border border-red-200/50 dark:border-red-700/50' 
+                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-100 hover:shadow-sm'
                   }
                 `}
               >
-                <div className="flex items-center gap-3">
-                  <IconComponent className="w-4 h-4" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                {item.active && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 dark:from-red-400/10 dark:to-orange-400/10"></div>
+                )}
+                <div className="flex items-center gap-3 relative z-10">
+                  <IconComponent className={`w-5 h-5 transition-transform duration-200 ${item.active ? 'scale-110' : 'group-hover:scale-105'}`} />
+                  <span className="text-sm font-semibold">{item.label}</span>
                 </div>
                 {item.badge && (
-                  <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5 min-w-[18px] h-5 rounded-full">
+                  <Badge className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 min-w-[20px] h-6 rounded-full shadow-sm relative z-10">
                     {item.badge}
                   </Badge>
                 )}
@@ -164,29 +173,29 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <Separator className="mx-3" />
+      <Separator className="mx-4 bg-slate-200 dark:bg-slate-700" />
 
       {/* Boards Section Header */}
-      <div className="px-3 py-2">
+      <div className="px-4 py-3 bg-gradient-to-r from-red-50/30 to-orange-50/30 dark:from-red-950/10 dark:to-orange-950/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <LayoutDashboard className="w-4 h-4 text-gray-600" />
-            <span className="text-sm font-semibold text-gray-700">Boards</span>
+            <LayoutDashboard className="w-5 h-5 text-red-600 dark:text-red-400" />
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">Boards</span>
           </div>
         </div>
       </div>
 
       {/* Boards List */}
-      <div className="flex-1 overflow-y-auto px-3 pb-3">
-        <div className="space-y-1">
+      <div className="flex-1 overflow-y-auto px-4 pb-4 apple-scrollbar">
+        <div className="space-y-2">
           {filteredBoards.length === 0 ? (
-            <div className="text-center py-8">
-              <Folder className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">
+            <div className="text-center py-12">
+              <Folder className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                 {searchTerm ? 'No boards found' : 'No boards yet'}
               </p>
               {!searchTerm && (
-                <p className="text-xs text-gray-400 mt-1">Create your first board</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">Create your first board</p>
               )}
             </div>
           ) : (
@@ -200,39 +209,43 @@ const Sidebar = () => {
                   key={board.id}
                   onClick={() => setCurrentBoard(board)}
                   className={`
-                    group flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200
+                    group flex items-center gap-4 p-4 rounded-xl cursor-pointer transition-all duration-200 relative overflow-hidden border
                     ${isActive 
-                      ? 'bg-blue-50 border border-blue-200' 
-                      : 'hover:bg-gray-50'
+                      ? 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 border-blue-200 dark:border-blue-700/50 shadow-md' 
+                      : 'hover:bg-slate-50 dark:hover:bg-slate-800/50 border-transparent hover:border-slate-200 dark:hover:border-slate-700/50 hover:shadow-sm'
                     }
                   `}
                 >
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
+                  )}
+                  
                   {/* Board Color Indicator */}
                   <div 
-                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    className="w-4 h-4 rounded-full flex-shrink-0 shadow-sm relative z-10"
                     style={{ backgroundColor: board.background_color || '#6366f1' }}
                   />
                   
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 relative z-10">
                     <div className="flex items-center justify-between">
-                      <h3 className={`text-sm font-medium truncate ${
-                        isActive ? 'text-blue-900' : 'text-gray-900'
+                      <h3 className={`text-sm font-semibold truncate ${
+                        isActive ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-slate-100'
                       }`}>
                         {board.title}
                       </h3>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         {board.is_starred && (
-                          <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                          <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
                         )}
                         {getAccessIcon(accessLevel)}
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-xs text-gray-500 capitalize">
+                    <div className="flex items-center justify-between mt-2">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 capitalize font-medium">
                         {board.owner_role || 'general'}
                       </span>
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">
                         {taskCount} items
                       </span>
                     </div>
@@ -245,38 +258,38 @@ const Sidebar = () => {
       </div>
 
       {/* User Profile Footer */}
-      <div className="p-3 border-t border-gray-100">
-        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer group">
-          <Avatar className="w-8 h-8">
-            <AvatarFallback className={`text-white text-sm font-medium ${getUserAvatarColor(user.fullname || user.username)}`}>
+      <div className="p-4 border-t border-slate-200/60 dark:border-slate-700/60 bg-gradient-to-r from-slate-50/50 to-slate-100/50 dark:from-slate-800/50 dark:to-slate-900/50">
+        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/70 dark:hover:bg-slate-800/70 cursor-pointer group transition-all duration-200 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm">
+          <Avatar className="w-10 h-10 ring-2 ring-slate-200 dark:ring-slate-700">
+            <AvatarFallback className={`text-white text-sm font-bold ${getUserAvatarColor(user.fullname || user.username)} shadow-sm`}>
               {getUserInitials(user.id)}
             </AvatarFallback>
           </Avatar>
           
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
               {user.fullname || user.username}
             </p>
-            <p className="text-xs text-gray-500 truncate">
-              {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate capitalize">
+              {user.role}
             </p>
           </div>
           
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <Button 
               variant="ghost" 
               size="sm"
-              className="w-7 h-7 p-0 hover:bg-gray-200"
+              className="w-8 h-8 p-0 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg"
             >
-              <Settings className="w-3 h-3" />
+              <Settings className="w-4 h-4" />
             </Button>
             <Button 
               variant="ghost" 
               size="sm"
               onClick={signOut}
-              className="w-7 h-7 p-0 hover:bg-red-50 hover:text-red-600"
+              className="w-8 h-8 p-0 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 rounded-lg"
             >
-              <LogOut className="w-3 h-3" />
+              <LogOut className="w-4 h-4" />
             </Button>
           </div>
         </div>

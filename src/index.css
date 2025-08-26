@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Steve Jobs-inspired Design System - Premium, Clean, Minimal */
+/* DRAVOX-inspired Design System - Premium Red/Orange Theme */
 
 @layer base {
   :root {
@@ -16,8 +16,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 13% 18%;
 
-    /* Premium Blue - Think iPhone blue */
-    --primary: 213 93% 67%;
+    /* DRAVOX Primary - Vibrant red/orange gradient */
+    --primary: 11 100% 60%;
     --primary-foreground: 0 0% 100%;
 
     /* Subtle backgrounds */
@@ -30,25 +30,27 @@
     --accent: 220 14% 96%;
     --accent-foreground: 220 13% 18%;
 
-    /* Minimal red for destructive actions */
+    /* Enhanced red for destructive actions */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Ultra-subtle borders */
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 213 93% 67%;
+    --ring: 11 100% 60%;
 
     --radius: 0.75rem;
 
-    /* Apple-inspired premium colors */
-    --apple-blue: 213 93% 67%;
+    /* DRAVOX brand colors */
+    --dravox-red: 11 100% 60%;
+    --dravox-orange: 15 100% 58%;
+    --dravox-light-red: 11 100% 95%;
+    --dravox-dark-red: 11 100% 40%;
     --apple-gray: 220 9% 46%;
     --apple-light-gray: 220 14% 96%;
     --apple-dark-gray: 220 13% 18%;
     --apple-green: 142 71% 45%;
-    --apple-orange: 28 100% 52%;
-    --apple-red: 0 84% 60%;
+    --apple-orange: 15 100% 58%;
     --apple-purple: 250 84% 54%;
 
     /* Sophisticated gradients */

@@ -35,8 +35,8 @@ const Header = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
               {/* Board Icon with Apple-style Design */}
-              <div className="w-12 h-12 rounded-2xl bg-gradient-apple-blue flex items-center justify-center shadow-apple-md neon-apple-blue">
-                <span className="text-xl filter drop-shadow-sm">{currentBoard.icon || '📋'}</span>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500 via-red-600 to-orange-600 flex items-center justify-center shadow-apple-md">
+                <span className="text-xl filter drop-shadow-sm text-white">{currentBoard.icon || '📋'}</span>
               </div>
               
               {/* Board Title with Clean Typography */}
@@ -84,7 +84,7 @@ const Header = () => {
           </div>
 
           {/* Center Section - Premium View Toggle */}
-          <div className="flex items-center gap-0.5 p-1 bg-muted/30 rounded-xl backdrop-blur-sm border border-border/20">
+          <div className="flex items-center gap-0.5 p-1 bg-gradient-to-r from-red-50/50 to-orange-50/50 dark:from-red-950/30 dark:to-orange-950/30 rounded-xl backdrop-blur-sm border border-red-100/40 dark:border-red-800/40">
             {(['table', 'kanban', 'dashboard', 'gantt'] as const).map((view) => (
               <Button
                 key={view}
@@ -94,8 +94,8 @@ const Header = () => {
                 className={`
                   px-4 py-2 rounded-lg font-medium clean-transition
                   ${currentView === view 
-                    ? 'bg-white dark:bg-slate-800 shadow-apple text-foreground neon-apple-blue border-0' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-white/60 dark:hover:bg-slate-800/60 border-0'
+                    ? 'bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 shadow-apple text-white border-0' 
+                    : 'text-muted-foreground hover:text-red-700 dark:hover:text-red-300 hover:bg-white/60 dark:hover:bg-slate-800/60 border-0'
                   }
                 `}
               >

@@ -208,40 +208,42 @@ const Training = () => {
   if (!user) return null;
 
   const TrainingContent = () => (
-    <div className="h-full bg-gray-50 p-6 overflow-y-auto">
+    <div className="h-full bg-gradient-to-br from-slate-50 via-red-50/30 to-orange-50/30 dark:from-slate-900 dark:via-red-950/30 dark:to-orange-950/30 p-8 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <GraduationCap className="w-8 h-8 text-purple-600" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-purple-700 dark:from-slate-100 dark:to-purple-300 bg-clip-text text-transparent flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl shadow-lg">
+                  <GraduationCap className="w-8 h-8 text-white" />
+                </div>
                 Training Center
               </h1>
-              <p className="text-gray-600 mt-1">Enhance your skills with our comprehensive training programs</p>
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Enhance your skills with our comprehensive training programs</p>
             </div>
-            <Button className="bg-purple-600 hover:bg-purple-700">
+            <Button className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 border-0 rounded-xl px-6 py-3">
               <Plus className="w-4 h-4 mr-2" />
               Create Course
             </Button>
           </div>
 
           {/* Search and Filters */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <Input
                 type="text"
                 placeholder="Search courses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-12 h-12 bg-white/80 dark:bg-slate-800/80 border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-sm backdrop-blur-sm focus:ring-2 focus:ring-red-500/30 focus:border-red-400 dark:focus:border-red-500 transition-all duration-200"
               />
             </div>
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="px-4 py-3 h-12 border border-slate-200/60 dark:border-slate-700/60 rounded-xl bg-white/80 dark:bg-slate-800/80 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-400 dark:focus:border-red-500 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-slate-300"
             >
               <option value="all">All Categories</option>
               {categories.map(category => (
@@ -251,7 +253,7 @@ const Training = () => {
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="px-4 py-3 h-12 border border-slate-200/60 dark:border-slate-700/60 rounded-xl bg-white/80 dark:bg-slate-800/80 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/30 focus:border-purple-400 dark:focus:border-purple-500 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-slate-300"
             >
               <option value="all">All Levels</option>
               <option value="beginner">Beginner</option>
@@ -261,48 +263,56 @@ const Training = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <Card>
-              <CardContent className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <Card className="border-0 shadow-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Total Courses</p>
-                    <p className="text-2xl font-bold text-gray-900">{totalCourses}</p>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Total Courses</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">{totalCourses}</p>
                   </div>
-                  <BookOpen className="w-8 h-8 text-purple-600" />
+                  <div className="p-3 bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/40 dark:to-blue-900/40 rounded-xl">
+                    <BookOpen className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-4">
+            <Card className="border-0 shadow-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Completed</p>
-                    <p className="text-2xl font-bold text-green-600">{completedCourses}</p>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Completed</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{completedCourses}</p>
                   </div>
-                  <CheckCircle className="w-8 h-8 text-green-600" />
+                  <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/40 dark:to-emerald-900/40 rounded-xl">
+                    <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-4">
+            <Card className="border-0 shadow-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">In Progress</p>
-                    <p className="text-2xl font-bold text-blue-600">{inProgressCourses}</p>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">In Progress</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">{inProgressCourses}</p>
                   </div>
-                  <Play className="w-8 h-8 text-blue-600" />
+                  <div className="p-3 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/40 dark:to-cyan-900/40 rounded-xl">
+                    <Play className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  </div>
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="p-4">
+            <Card className="border-0 shadow-sm bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">Avg Progress</p>
-                    <p className="text-2xl font-bold text-orange-600">{Math.round(averageProgress)}%</p>
+                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Avg Progress</p>
+                    <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">{Math.round(averageProgress)}%</p>
                   </div>
-                  <TrendingUp className="w-8 h-8 text-orange-600" />
+                  <div className="p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/40 dark:to-red-900/40 rounded-xl">
+                    <TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                  </div>
                 </div>
               </CardContent>
             </Card>

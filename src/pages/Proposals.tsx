@@ -132,40 +132,42 @@ const Proposals = () => {
   if (!user) return null;
 
   const ProposalsContent = () => (
-    <div className="h-full bg-gray-50 p-6 overflow-y-auto">
+    <div className="h-full bg-gradient-to-br from-slate-50 via-red-50/30 to-orange-50/30 dark:from-slate-900 dark:via-red-950/30 dark:to-orange-950/30 p-8 overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                <FileText className="w-8 h-8 text-blue-600" />
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-blue-700 dark:from-slate-100 dark:to-blue-300 bg-clip-text text-transparent flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl shadow-lg">
+                  <FileText className="w-8 h-8 text-white" />
+                </div>
                 Proposal Quotations
               </h1>
-              <p className="text-gray-600 mt-1">Manage your business proposals and quotations</p>
+              <p className="text-slate-600 dark:text-slate-400 mt-2 text-lg">Manage your business proposals and quotations</p>
             </div>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-700 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-200 border-0 rounded-xl px-6 py-3">
               <Plus className="w-4 h-4 mr-2" />
               New Proposal
             </Button>
           </div>
 
           {/* Search and Filters */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <Input
                 type="text"
                 placeholder="Search proposals..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-12 h-12 bg-white/80 dark:bg-slate-800/80 border-slate-200/60 dark:border-slate-700/60 rounded-xl shadow-sm backdrop-blur-sm focus:ring-2 focus:ring-red-500/30 focus:border-red-400 dark:focus:border-red-500 transition-all duration-200"
               />
             </div>
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-3 h-12 border border-slate-200/60 dark:border-slate-700/60 rounded-xl bg-white/80 dark:bg-slate-800/80 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400 dark:focus:border-blue-500 backdrop-blur-sm transition-all duration-200 text-slate-700 dark:text-slate-300"
             >
               <option value="all">All Status</option>
               <option value="draft">Draft</option>

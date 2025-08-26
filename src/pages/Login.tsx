@@ -18,9 +18,9 @@ const Login = () => {
   // Show loading spinner during auth check
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/30 to-orange-50/30 dark:from-slate-900 dark:via-red-950/30 dark:to-orange-950/30 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 gradient-apple-blue rounded-2xl flex items-center justify-center mx-auto mb-4 animate-gentle-float">
+          <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-gentle-float">
             <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           </div>
           <p className="text-muted-foreground font-medium">Loading...</p>
