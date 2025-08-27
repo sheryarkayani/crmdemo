@@ -26,7 +26,7 @@ const Header = () => {
   const unreadCount = recentActivities.filter(a => !a.read).length;
   const markAsRead = (id: string) => setRecentActivities(prev => prev.map(a => a.id === id ? { ...a, read: true } : a));
 
-  // Mock team members (demo only)
+  // Mock team members (real-time only)
   const teamMembers = [
     { id: 'tm-1', name: 'Aisha Khan', email: 'aisha@company.com', role: 'Sales', status: 'online' },
     { id: 'tm-2', name: 'Bilal Ahmed', email: 'bilal@company.com', role: 'Purchase', status: 'away' },

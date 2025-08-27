@@ -266,7 +266,7 @@ Sales Team`
               SIMULATION MODE
             </Badge>
             <p className="text-sm text-yellow-700 mt-1">
-              This email will not actually be sent. This is for demonstration purposes only.
+              This email will not actually be sent. This is for real-timenstration purposes only.
             </p>
           </div>
         </CardContent>

@@ -75,10 +75,10 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
     .find(board => board.id === formData.board_id)
     ?.groups || [];
 
-  // Get available users (mock data for demo)
+  // Get available users (mock data for real-time)
   useEffect(() => {
     if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-      // Demo mode - mock users
+      // real-time mode - mock users
       setAvailableUsers([
         { id: '11111111-1111-1111-1111-111111111111', name: 'Super Administrator' },
         { id: 'a1b2c3d4-e5f6-7890-1234-567890abcdef', name: 'John Developer' },
@@ -124,11 +124,11 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
     try {
       setLoading(true);
 
-      // Check if we're in demo mode
+      // Check if we're in real-time mode
       if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
         toast({
-          title: "Demo Mode",
-          description: "Task creation is not available in demo mode. Please configure Supabase for full functionality.",
+          title: "real-time Mode",
+          description: "Task creation is not available in real-time mode. Please configure Supabase for full functionality.",
           variant: "default",
         });
         return;
@@ -246,7 +246,7 @@ const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
           <DialogTitle className="text-xl font-semibold">Create New Task</DialogTitle>
           {(!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) && (
             <p className="text-sm text-amber-600 bg-amber-50 p-2 rounded-md">
-              ⚠️ Demo Mode: Task creation requires Supabase configuration
+              ⚠️ real-time Mode: Task creation requires Supabase configuration
             </p>
           )}
         </DialogHeader>

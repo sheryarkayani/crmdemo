@@ -53,7 +53,7 @@ The MyWorks feature provides users with a personalized view of their tasks, dead
 
 ### Backend Integration
 - **Supabase**: Real-time database queries
-- **Demo Mode**: Fallback to mock data when database not configured
+- **real-time Mode**: Fallback to mock data when database not configured
 - **Error Handling**: Graceful fallbacks and user notifications
 
 ## Usage
@@ -79,10 +79,10 @@ The MyWorks feature provides users with a personalized view of their tasks, dead
 2. Data automatically updates when navigating to the page
 3. Real-time updates when using Supabase
 
-## Demo Mode
+## real-time Mode
 When Supabase is not configured, the system provides mock data:
 - Sample tasks with realistic deadlines
-- Demonstrates all UI features
+- real-timenstrates all UI features
 - Shows expected behavior without database setup
 
 ## Future Enhancements

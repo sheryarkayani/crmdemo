@@ -26,7 +26,7 @@ interface BoardContextType {
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
 
-// Check if Supabase is configured (forced off for mock/demo UI)
+// Check if Supabase is configured (forced off for mock/real-time UI)
 const isSupabaseConfigured = () => {
   // return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
   return false;
@@ -197,7 +197,7 @@ const createMockBoards = (): Board[] => {
         updated_at: now.toISOString(),
         tasks: deals.map((d, i) => ({
           id: mkId('act-task', i + 1),
-          title: i === 0 ? 'Demo Call' : 'Pricing Review',
+          title: i === 0 ? 'real-time Call' : 'Pricing Review',
           status: i === 0 ? 'In Progress' : 'New',
           assignee_id: d.assign,
           start_date: now.toISOString(),
@@ -603,7 +603,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       console.error('Failed to initialize boards:', error);
       toast({
         title: "Connection Error",
-        description: "Using demo data. Check your internet connection.",
+        description: "Using real-time data. Check your internet connection.",
         variant: "destructive",
       });
       
@@ -665,7 +665,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Board creation requires Supabase configuration",
         variant: "default",
       });
@@ -894,10 +894,10 @@ export function BoardProvider({ children }: { children: ReactNode }) {
           throw error; // Re-throw to be caught by the caller
         }
       } else {
-        // Show demo mode message for title updates
+        // Show real-time mode message for title updates
         if (updates.title) {
           toast({
-            title: "Demo Mode",
+            title: "real-time Mode",
             description: "Title updated locally. Enable Supabase for database persistence.",
             variant: "default",
           });
@@ -922,7 +922,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Task creation requires Supabase configuration",
         variant: "default",
       });
@@ -967,7 +967,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Task deletion requires Supabase configuration",
         variant: "default",
       });
@@ -1016,7 +1016,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Group creation requires Supabase configuration",
         variant: "default",
       });
@@ -1080,7 +1080,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Task creation requires Supabase configuration",
         variant: "default",
       });
@@ -1156,7 +1156,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Group editing requires Supabase configuration",
         variant: "default",
       });
@@ -1221,7 +1221,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
 
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Group deletion requires Supabase configuration",
         variant: "default",
       });
@@ -1281,7 +1281,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
   const deleteBoard = async (boardId: string) => {
     if (!isSupabaseConfigured()) {
       toast({
-        title: "Demo Mode",
+        title: "real-time Mode",
         description: "Board deletion requires Supabase configuration",
         variant: "default",
       });

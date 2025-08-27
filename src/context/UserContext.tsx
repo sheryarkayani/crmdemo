@@ -13,7 +13,7 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// All application users including auth demo users
+// All application users including auth real-time users
 const allUsers: User[] = [
   // Super Admin
   {

@@ -54,8 +54,8 @@ const MyWorksContent = () => {
       console.log('Fetching user tasks for user:', user?.id);
       
       if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        // Demo mode - use mock data
-        console.log('Using demo mode - generating mock tasks');
+        // real-time mode - use mock data
+        console.log('Using real-time mode - generating mock tasks');
         const mockTasks = generateMockUserTasks();
         console.log('Generated mock tasks:', mockTasks);
         setTasks(mockTasks);

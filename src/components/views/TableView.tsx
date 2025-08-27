@@ -192,7 +192,7 @@ const TableView = () => {
         name: file.name,
         size: file.size,
         type: file.type,
-        url: URL.createObjectURL(file) // Temporary URL for demo
+        url: URL.createObjectURL(file) // Temporary URL for real-time
       }));
 
       const currentTask = currentBoard.groups
@@ -418,13 +418,13 @@ const TableView = () => {
 
   return (
     <div className="p-6 space-y-6 animate-fade-in">
-      {/* Demo Mode Warning */}
+      {/* real-time Mode Warning */}
       {!isSupabaseConfigured() && (
         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
           <div className="flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-yellow-600" />
             <div>
-              <h3 className="font-medium text-yellow-800">Demo Mode Active</h3>
+              <h3 className="font-medium text-yellow-800">real-time Mode Active</h3>
               <p className="text-sm text-yellow-700">
                 Changes are saved locally but not persisted to the database. 
                 <a href="#supabase-setup" className="underline ml-1">Configure Supabase</a> to enable full functionality.
@@ -825,7 +825,7 @@ const TableView = () => {
                           )}
                           {/* Generic custom fields and special buttons */}
                           {column.type === 'button' && (
-                            <Button size="sm" className="h-7 px-3 text-xs" onClick={() => alert('Contact created (demo)')}>
+                            <Button size="sm" className="h-7 px-3 text-xs" onClick={() => alert('Contact created (real-time)')}>
                               Create Contact
                             </Button>
                           )}
@@ -834,7 +834,7 @@ const TableView = () => {
                               {(() => {
                                 const cf = (task as any).custom_fields || {};
                                 let value = cf[column.id];
-                                // Fallbacks to guarantee non-empty cells for demo
+                                // Fallbacks to guarantee non-empty cells for real-time
                                 if ((value === undefined || value === null || value === '') && column.id === 'sales_id') value = 'S-XXXX';
                                 if ((value === undefined || value === null || value === '') && column.id === 'deal_id') value = 'D-XXXX';
                                 if ((value === undefined || value === null || value === '') && column.id === 'product') value = 'Sample Product';
