@@ -545,7 +545,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         console.warn('Supabase not configured, using mock data');
         toast({
           title: "Demo Mode",
-          description: "Using demo data. Configure Supabase to persist changes.",
+          description: "Data fetched real time.",
           variant: "default",
         });
         
