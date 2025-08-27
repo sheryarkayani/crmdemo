@@ -2,15 +2,15 @@
 
 A comprehensive CRM system with automated email processing, lead management, and task tracking capabilities.
 
-## ⚠️ **IMPORTANT: real-time Mode Active**
+## ⚠️ **IMPORTANT: demo Mode Active**
 
-**Current Status**: The system is running in **real-time Mode** because Supabase is not configured.
+**Current Status**: The system is running in **demo Mode** because Supabase is not configured.
 
 ### What This Means:
 - ✅ **All UI Features Work**: Editing, viewing, drag & drop, etc.
 - ❌ **No Database Persistence**: Changes are lost on page refresh
 - ❌ **No Multi-User Support**: Data is not shared between users
-- ❌ **No Real CRM Functionality**: This is just a frontend real-time
+- ❌ **No Real CRM Functionality**: This is just a frontend demo
 
 ### How to Enable Full Functionality:
 1. **Follow the setup guide**: See `SUPABASE_SETUP.md` for detailed instructions
@@ -28,7 +28,7 @@ A comprehensive CRM system with automated email processing, lead management, and
   - ✅ **Table View** - Click any task title in the table to edit  
   - ✅ **Dashboard View** - Click lead names in the Recent Leads section
   - ✅ **Gantt View** - Click task names in the left panel to edit
-- **Real-time Updates**: Changes are saved immediately (locally in real-time mode)
+- **demo Updates**: Changes are saved immediately (locally in demo mode)
 - **Keyboard Shortcuts**: 
   - `Enter` to save changes
   - `Escape` to cancel editing
@@ -57,7 +57,7 @@ A comprehensive CRM system with automated email processing, lead management, and
 4. Type your changes
 5. Press `Enter` to save or `Escape` to cancel
 
-**Note**: In real-time mode, changes are only saved locally and will be lost on page refresh.
+**Note**: In demo mode, changes are only saved locally and will be lost on page refresh.
 
 ### **View-Specific Editing Locations**
 
@@ -82,7 +82,7 @@ A comprehensive CRM system with automated email processing, lead management, and
 2. A comprehensive detail panel will open
 3. Click "Edit Lead" to modify information
 4. Fill in product/service details, client information, and vendor data
-5. Click "Save Changes" to update (locally in real-time mode)
+5. Click "Save Changes" to update (locally in demo mode)
 
 ## 🔧 **Technical Implementation**
 
@@ -96,14 +96,14 @@ A comprehensive CRM system with automated email processing, lead management, and
 - **Local State Updates**: Changes sync immediately with the UI
 - **Activity Logging**: All modifications are tracked in the activity log
 - **Data Validation**: Input validation and error handling for all fields
-- **real-time Mode**: Graceful fallback when database is not available
+- **demo Mode**: Graceful fallback when database is not available
 
 ### **User Experience**
 - **Responsive Design**: Works on desktop and mobile devices
 - **Dark Mode Support**: Consistent theming across all components
 - **Accessibility**: Keyboard navigation and screen reader support
 - **Cross-View Consistency**: Same editing experience regardless of view type
-- **real-time Mode Indicators**: Clear warnings when database is not available
+- **demo Mode Indicators**: Clear warnings when database is not available
 
 ## 📋 **Workflow for Sales Reps**
 
@@ -115,11 +115,11 @@ A comprehensive CRM system with automated email processing, lead management, and
 6. **Qualify Lead** → Set qualification score and urgency level
 7. **Move Through Pipeline** → Use drag & drop in Kanban or update status in any view
 
-**Note**: In real-time mode, all changes are temporary and will be lost on page refresh.
+**Note**: In demo mode, all changes are temporary and will be lost on page refresh.
 
 ## 🔮 **Future Enhancements**
 
-- **Stock Integration**: Real-time inventory checking
+- **Stock Integration**: demo inventory checking
 - **Automated Workflows**: Trigger actions based on lead qualification scores
 - **Reporting Dashboard**: Analytics on lead conversion rates and product performance
 - **Email Templates**: Automated follow-up emails based on lead status
@@ -127,7 +127,7 @@ A comprehensive CRM system with automated email processing, lead management, and
 
 ## 🛠 **Installation & Setup**
 
-### **Quick Start (real-time Mode)**
+### **Quick Start (demo Mode)**
 1. **Install Dependencies**: `npm install` or `bun install`
 2. **Start Development**: `npm run dev` or `bun dev`
 3. **Use the System**: All features work but data is not persisted
@@ -146,6 +146,6 @@ For technical support or feature requests, please contact the development team o
 
 **Version**: 2.1.0  
 **Last Updated**: December 2024  
-**Status**: real-time Mode Active ⚠️  
+**Status**: demo Mode Active ⚠️  
 **Editable Titles**: Available in ALL Views ✅  
 **Database Persistence**: Requires Supabase Setup ⚠️

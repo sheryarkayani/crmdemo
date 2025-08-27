@@ -20,7 +20,7 @@ const Sidebar = () => {
   const location = useLocation();
   const [searchTerm, setSearchTerm] = React.useState('');
 
-  // Mock notifications (real-time-only)
+  // Mock notifications (demo-only)
   const [notifications, setNotifications] = React.useState<Array<{ id: string; title: string; message: string; timestamp: string; read: boolean; type: 'info' | 'warning' | 'success' }>>([
     { id: 'n-1', title: 'Proposal Sent', message: 'Proposal for Acme Corp has been emailed.', timestamp: new Date().toISOString(), read: false, type: 'success' },
     { id: 'n-2', title: 'Payment Due', message: 'Invoice INV-9001 is due in 3 days.', timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(), read: false, type: 'warning' },

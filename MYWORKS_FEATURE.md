@@ -52,8 +52,8 @@ The MyWorks feature provides users with a personalized view of their tasks, dead
 - **Filter Controls**: Search and filtering interface
 
 ### Backend Integration
-- **Supabase**: Real-time database queries
-- **real-time Mode**: Fallback to mock data when database not configured
+- **Supabase**: demo database queries
+- **demo Mode**: Fallback to mock data when database not configured
 - **Error Handling**: Graceful fallbacks and user notifications
 
 ## Usage
@@ -77,12 +77,12 @@ The MyWorks feature provides users with a personalized view of their tasks, dead
 ### Refreshing Data
 1. Click the "Refresh" button in the header
 2. Data automatically updates when navigating to the page
-3. Real-time updates when using Supabase
+3. demo updates when using Supabase
 
-## real-time Mode
+## demo Mode
 When Supabase is not configured, the system provides mock data:
 - Sample tasks with realistic deadlines
-- real-timenstrates all UI features
+- demonstrates all UI features
 - Shows expected behavior without database setup
 
 ## Future Enhancements
@@ -90,7 +90,7 @@ When Supabase is not configured, the system provides mock data:
 - **Task Creation**: Add new tasks directly from MyWorks
 - **Bulk Actions**: Select multiple tasks for batch operations
 - **Export**: Download task data in various formats
-- **Notifications**: Real-time updates for task changes
+- **Notifications**: demo updates for task changes
 
 ## Troubleshooting
 

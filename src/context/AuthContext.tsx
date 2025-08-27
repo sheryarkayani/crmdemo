@@ -24,8 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       
       if (!isSupabaseConfigured()) {
-        // real-time mode - use mock super admin user
-        console.warn('Supabase not configured, using real-time auth');
+        // demo mode - use mock super admin user
+        console.warn('Supabase not configured, using demo auth');
         const mockUser: User = {
           id: '11111111-1111-1111-1111-111111111111',
           email: 'testsuperadmin@example.com',
@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return () => subscription.unsubscribe();
     } catch (error) {
       console.error('Auth initialization failed:', error);
-      // Fall back to real-time mode
+      // Fall back to demo mode
       const mockUser: User = {
         id: '11111111-1111-1111-1111-111111111111',
         email: 'testsuperadmin@example.com',
@@ -111,8 +111,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured()) {
-      // real-time mode - simulate login based on email
-      const real-timeUsers: Record<string, User> = {
+      // demo mode - simulate login based on email
+      const demoUsers: Record<string, User> = {
         'testsuperadmin@example.com': {
           id: '11111111-1111-1111-1111-111111111111',
           email: 'testsuperadmin@example.com',
@@ -178,12 +178,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       };
 
-      const real-timeUser = real-timeUsers[email];
-      if (real-timeUser) {
-        setUser(real-timeUser);
+      const demoUser = demoUsers[email];
+      if (demoUser) {
+        setUser(demoUser);
         toast({
-          title: "real-time Login Successful",
-          description: `Logged in as ${real-timeUser.fullname}`,
+          title: " Login Successful",
+          description: `Logged in as ${demoUser.fullname}`,
         });
         return;
       } else {

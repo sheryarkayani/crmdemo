@@ -2,7 +2,7 @@
 
 ## Why Database Updates Aren't Working
 
-The CRM system is currently running in **real-time mode** because Supabase is not configured. This means:
+The CRM system is currently running in **demo mode** because Supabase is not configured. This means:
 - ✅ All UI features work (editing, viewing, etc.)
 - ❌ Changes are NOT saved to the database
 - ❌ Data is lost when you refresh the page
@@ -61,7 +61,7 @@ bun dev
 ## Verify Setup
 
 After setup, you should see:
-- ✅ No more "real-time Mode" messages
+- ✅ No more "demo Mode" messages
 - ✅ Database updates work immediately
 - ✅ Changes persist after page refresh
 - ✅ Console shows "Successfully updated task" messages

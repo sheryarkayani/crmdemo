@@ -334,13 +334,13 @@ const KanbanView = () => {
         onDragEnd={handleDragEnd}
       >
         <div className="p-6 bg-background min-h-screen">
-          {/* real-time Mode Warning */}
+          {/* demo Mode Warning */}
           {!isSupabaseConfigured() && (
             <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
               <div className="flex items-center gap-3">
                 <AlertTriangle className="w-5 h-5 text-yellow-600" />
                 <div>
-                  <h3 className="font-medium text-yellow-800">real-time Mode Active</h3>
+                  <h3 className="font-medium text-yellow-800">Real-time  Mode Active</h3>
                   <p className="text-sm text-yellow-700">
                     Changes are saved locally but not persisted to the database. 
                     <a href="#supabase-setup" className="underline ml-1">Configure Supabase</a> to enable full functionality.
