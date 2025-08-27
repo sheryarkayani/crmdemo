@@ -11,6 +11,13 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
+  // Persist last route
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('lastRoute', location.pathname + location.search + location.hash);
+    } catch {}
+  }, [location.pathname, location.search, location.hash]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">

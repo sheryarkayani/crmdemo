@@ -26,166 +26,511 @@ interface BoardContextType {
 
 const BoardContext = createContext<BoardContextType | undefined>(undefined);
 
-// Check if Supabase is configured
+// Check if Supabase is configured (forced off for mock/demo UI)
 const isSupabaseConfigured = () => {
-  return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
+  // return !!(import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY);
+  return false;
 };
 
 // Fallback mock data for when Supabase is not configured
-const createMockBoard = (): Board => ({
-  id: 'mock-board-1',
-  title: 'E-Commerce Platform',
-  description: "Pakistan's leading online marketplace development project",
-  owner_id: '11111111-1111-1111-1111-111111111111', // Superadmin user ID
-  owner_role: 'superadmin', // Set to superadmin so the demo superadmin can edit
-  background_color: '#00A86B',
-  is_starred: false,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-  groups: [
+const createMockBoards = (): Board[] => {
+  const now = new Date();
+  const mkId = (prefix: string, n: number) => `${prefix}-${n}`;
+
+  // Shared references to link data across boards
+  const deals = [
     {
-      id: 'group-1',
-      title: 'Frontend Development',
-      color: '#007BFF',
-      board_id: 'mock-board-1',
-      position: 0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      tasks: [
-        {
-          id: 'task-1',
-          title: 'Design Product Catalog Page',
-          description: 'Create responsive product catalog for Pakistani brands',
-          status: 'In Progress',
-          priority: 'High',
-          assignee_id: 'a1b2c3d4-e5f6-7890-1234-567890abcdef',
-          due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          start_date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          budget: 2500,
-          progress: 65,
-          text_field: 'Working on mobile responsiveness and Urdu fonts',
-          tags: 'design,mobile,responsive,urdu',
-          board_id: 'mock-board-1',
-          group_id: 'group-1',
-          position: 0,
-          number_field: 1,
-          files: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        },
-        {
-          id: 'task-2',
-          title: 'Implement Urdu Language Support',
-          description: 'Add RTL support and Urdu translations',
-          status: 'Planning',
-          priority: 'Medium',
-          assignee_id: 'b2c3d4e5-f6g7-8901-2345-678901bcdefg',
-          due_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-          start_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-          end_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-          budget: 1800,
-          progress: 15,
-          text_field: 'Research RTL frameworks and Urdu font libraries',
-          tags: 'development,i18n,rtl,urdu',
-          board_id: 'mock-board-1',
-          group_id: 'group-1',
-          position: 1,
-          number_field: 2,
-          files: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ]
+      salesId: 'S-1001',
+      dealId: 'D-1001',
+      dealTitle: 'Acme CRM Deployment',
+      customerContact: 'Jane Smith',
+      customerCompany: 'Acme Corp',
+      product: 'CRM Suite',
+      selectedVendor: 'VendorOne',
+      vendorCompany: 'VendorOne Ltd',
+      stage: 'Proposal',
+      assign: 'user-1',
+      dealValue: 25000,
+      expectedCloseDate: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000).toISOString(),
+      closeProbability: 60,
+      forecastValue: 15000
     },
     {
-      id: 'group-2',
-      title: 'Backend Development',
-      color: '#28A745',
-      board_id: 'mock-board-1',
-      position: 1,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      tasks: [
-        {
-          id: 'task-3',
-          title: 'Setup Payment Gateway Integration',
-          description: 'Integrate JazzCash, EasyPaisa, and bank transfers',
-          status: 'In Progress',
-          priority: 'Critical',
-          assignee_id: '7744c17c-d74a-4d65-93d5-34d6bb8ffcad',
-          due_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-          start_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          end_date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-          budget: 3500,
-          progress: 45,
-          text_field: 'Setting up JazzCash API integration first',
-          tags: 'backend,payment,integration,api',
-          board_id: 'mock-board-1',
-          group_id: 'group-2',
-          position: 0,
-          number_field: 3,
-          files: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ]
-    },
-    {
-      id: 'group-3',
-      title: 'UI/UX Design',
-      color: '#6F42C1',
-      board_id: 'mock-board-1',
-      position: 2,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      tasks: [
-        {
-          id: 'task-4',
-          title: 'Design Mobile App Interface',
-          description: 'Create mobile-first design for Pakistani users',
-          status: 'Completed',
-          priority: 'High',
-          assignee_id: 'd4e5f6g7-h8i9-0123-4567-890123defghi',
-          due_date: null,
-          start_date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-          end_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          budget: 2000,
-          progress: 100,
-          text_field: 'Mobile design completed and approved by client',
-          tags: 'design,mobile,ui,ux,completed',
-          board_id: 'mock-board-1',
-          group_id: 'group-3',
-          position: 0,
-          number_field: 4,
-          files: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ]
+      salesId: 'S-1002',
+      dealId: 'D-1002',
+      dealTitle: 'Globex Helpdesk Upgrade',
+      customerContact: 'Mark Lee',
+      customerCompany: 'Globex',
+      product: 'Helpdesk Pro',
+      selectedVendor: 'VendorTwo',
+      vendorCompany: 'VendorTwo LLC',
+      stage: 'Negotiation',
+      assign: 'user-2',
+      dealValue: 40000,
+      expectedCloseDate: new Date(now.getTime() + 25 * 24 * 60 * 60 * 1000).toISOString(),
+      closeProbability: 45,
+      forecastValue: 18000
     }
-  ],
-  status_options: [
-    { id: 'status-1', board_id: 'mock-board-1', label: 'Planning', color: '#FFA500', position: 0, created_at: new Date().toISOString() },
-    { id: 'status-2', board_id: 'mock-board-1', label: 'In Progress', color: '#007BFF', position: 1, created_at: new Date().toISOString() },
-    { id: 'status-3', board_id: 'mock-board-1', label: 'Review', color: '#FFC107', position: 2, created_at: new Date().toISOString() },
-    { id: 'status-4', board_id: 'mock-board-1', label: 'Testing', color: '#6F42C1', position: 3, created_at: new Date().toISOString() },
-    { id: 'status-5', board_id: 'mock-board-1', label: 'Completed', color: '#28A745', position: 4, created_at: new Date().toISOString() },
-    { id: 'status-6', board_id: 'mock-board-1', label: 'On Hold', color: '#DC3545', position: 5, created_at: new Date().toISOString() }
-  ],
-  priority_options: [
-    { id: 'priority-1', board_id: 'mock-board-1', label: 'Critical', color: '#DC3545', position: 0, created_at: new Date().toISOString() },
-    { id: 'priority-2', board_id: 'mock-board-1', label: 'High', color: '#FD7E14', position: 1, created_at: new Date().toISOString() },
-    { id: 'priority-3', board_id: 'mock-board-1', label: 'Medium', color: '#FFC107', position: 2, created_at: new Date().toISOString() },
-    { id: 'priority-4', board_id: 'mock-board-1', label: 'Low', color: '#28A745', position: 3, created_at: new Date().toISOString() },
-    { id: 'priority-5', board_id: 'mock-board-1', label: 'Nice to Have', color: '#6C757D', position: 4, created_at: new Date().toISOString() }
-  ]
-});
+  ];
+
+  const commonStatus = [
+    { id: 'st-1', board_id: '', label: 'New', color: '#3B82F6', position: 0, created_at: now.toISOString() },
+    { id: 'st-2', board_id: '', label: 'In Progress', color: '#F59E0B', position: 1, created_at: now.toISOString() },
+    { id: 'st-3', board_id: '', label: 'Proposal', color: '#8B5CF6', position: 2, created_at: now.toISOString() },
+    { id: 'st-4', board_id: '', label: 'Negotiation', color: '#EC4899', position: 3, created_at: now.toISOString() },
+    { id: 'st-5', board_id: '', label: 'Won', color: '#10B981', position: 4, created_at: now.toISOString() },
+    { id: 'st-6', board_id: '', label: 'Lost', color: '#EF4444', position: 5, created_at: now.toISOString() }
+  ];
+
+  const commonPriority = [
+    { id: 'pr-1', board_id: '', label: 'High', color: '#DC2626', position: 0, created_at: now.toISOString() },
+    { id: 'pr-2', board_id: '', label: 'Medium', color: '#F59E0B', position: 1, created_at: now.toISOString() },
+    { id: 'pr-3', board_id: '', label: 'Low', color: '#10B981', position: 2, created_at: now.toISOString() }
+  ];
+
+  const ownerId = '11111111-1111-1111-1111-111111111111';
+  const mkBoard = (id: string, title: string, color: string, groups: any[]): Board => ({
+    id,
+    title,
+    description: `${title} board (mock)`,
+    owner_id: ownerId,
+    owner_role: 'superadmin',
+    background_color: color,
+    is_starred: false,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
+    groups: groups.map((g, idx) => ({ ...g, position: idx })),
+    status_options: commonStatus.map((s) => ({ ...s, board_id: id })),
+    priority_options: commonPriority.map((p) => ({ ...p, board_id: id }))
+  });
+
+  const salesBoard = mkBoard(
+    'board-sales',
+    'Sales Tracker',
+    '#0ea5e9',
+    [
+      {
+        id: 'sales-g1',
+        title: 'Pipeline',
+        color: '#3B82F6',
+        board_id: 'board-sales',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('sales-task', i + 1),
+          title: d.dealTitle,
+          status: d.stage,
+          priority: i === 0 ? 'High' : 'Medium',
+          assignee_id: d.assign,
+          due_date: d.expectedCloseDate,
+          number_field: d.dealValue,
+          board_id: 'board-sales',
+          group_id: 'sales-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            sales_id: d.salesId,
+            product: d.product,
+            customer: d.customerContact,
+            customer_company: d.customerCompany,
+            selected_vendor: d.selectedVendor,
+            vendor_company: d.vendorCompany,
+            close_probability: d.closeProbability,
+            forecast_value: d.forecastValue
+          }
+        }))
+      }
+    ]
+  );
+
+  const leadsBoard = mkBoard(
+    'board-leads',
+    'Leads',
+    '#22c55e',
+    [
+      {
+        id: 'leads-g1',
+        title: 'Inbound',
+        color: '#22c55e',
+        board_id: 'board-leads',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('lead-task', i + 1),
+          title: `${d.customerCompany} - ${d.product}`,
+          status: i === 0 ? 'In Progress' : 'New',
+          priority: i === 0 ? 'High' : 'Medium',
+          assignee_id: d.assign,
+          due_date: new Date(now.getTime() + (i + 2) * 24 * 60 * 60 * 1000).toISOString(),
+          board_id: 'board-leads',
+          group_id: 'leads-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          client_email: i === 0 ? 'jane.smith@acme.com' : 'mark@globex.com',
+          custom_fields: {
+            company: d.customerCompany,
+            title_role: i === 0 ? 'IT Manager' : 'Operations Lead',
+            email: i === 0 ? 'jane.smith@acme.com' : 'mark@globex.com',
+            phone: i === 0 ? '+1 555-0101' : '+1 555-0102',
+            last_interaction: now.toISOString(),
+            active_sequences: i === 0 ? 'Onboarding' : 'Nurture',
+            linked_sales_id: d.salesId
+          }
+        }))
+      }
+    ]
+  );
+
+  const activityBoard = mkBoard(
+    'board-activity',
+    'Activity',
+    '#a78bfa',
+    [
+      {
+        id: 'act-g1',
+        title: 'Activities',
+        color: '#a78bfa',
+        board_id: 'board-activity',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('act-task', i + 1),
+          title: i === 0 ? 'Demo Call' : 'Pricing Review',
+          status: i === 0 ? 'In Progress' : 'New',
+          assignee_id: d.assign,
+          start_date: now.toISOString(),
+          end_date: new Date(now.getTime() + (i + 1) * 60 * 60 * 1000).toISOString(),
+          board_id: 'board-activity',
+          group_id: 'act-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            activity_type: i === 0 ? 'Call' : 'Meeting',
+            owner: d.assign,
+            related_items: d.salesId
+          }
+        }))
+      }
+    ]
+  );
+
+  const purchaseBoard = mkBoard(
+    'board-purchase',
+    'Purchase Tracker',
+    '#f97316',
+    [
+      {
+        id: 'pur-g1',
+        title: 'Purchases',
+        color: '#f97316',
+        board_id: 'board-purchase',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('pur-task', i + 1),
+          title: `${d.product} Purchase`,
+          status: i === 0 ? 'In Progress' : 'New',
+          assignee_id: d.assign,
+          number_field: d.dealValue,
+          board_id: 'board-purchase',
+          group_id: 'pur-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            person: d.assign,
+            deal_id: d.dealId,
+            product: d.product,
+            vendor: d.selectedVendor,
+            vendor_company: d.vendorCompany,
+            customer: d.customerContact,
+            sales_files: 'proposal.pdf',
+            sale_id: d.salesId,
+            delivery_time: '2 weeks',
+            purchase_invoice: i === 0 ? 'INV-9001' : 'INV-9002',
+            delivery_notes: 'Deliver to HQ'
+          }
+        }))
+      }
+    ]
+  );
+
+  const storeBoard = mkBoard(
+    'board-store',
+    'Store',
+    '#10b981',
+    [
+      {
+        id: 'store-g1',
+        title: 'Inventory',
+        color: '#10b981',
+        board_id: 'board-store',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: [
+          {
+            id: 'store-1',
+            title: 'CRM Suite License',
+            status: 'In Progress',
+            board_id: 'board-store',
+            group_id: 'store-g1',
+            position: 0,
+            created_at: now.toISOString(),
+            updated_at: now.toISOString(),
+            custom_fields: {
+              price: 500,
+              sku: 'CRM-STD',
+              type: 'Software',
+              manufecturer: 'Dravox',
+              quantity: 100,
+              unit: 'license',
+              consumed: 35,
+              left_qty: 65,
+              min_qty: 20,
+              loc_in_inventory: 'Aisle 1',
+              links: 'https://example.com',
+              remarks: 'Annual renewal',
+              part_number: 'DX-CRM-001'
+            }
+          },
+          {
+            id: 'store-2',
+            title: 'Helpdesk Pro License',
+            status: 'In Progress',
+            board_id: 'board-store',
+            group_id: 'store-g1',
+            position: 1,
+            created_at: now.toISOString(),
+            updated_at: now.toISOString(),
+            custom_fields: {
+              price: 300,
+              sku: 'HELP-PRO',
+              type: 'Software',
+              manufecturer: 'Dravox',
+              quantity: 80,
+              unit: 'license',
+              consumed: 20,
+              left_qty: 60,
+              min_qty: 15,
+              loc_in_inventory: 'Aisle 2',
+              links: 'https://example.com',
+              remarks: 'Bundle pricing',
+              part_number: 'DX-HLP-010'
+            }
+          }
+        ]
+      }
+    ]
+  );
+
+  const opsBoard = mkBoard(
+    'board-ops',
+    'OPS',
+    '#6366f1',
+    [
+      {
+        id: 'ops-g1',
+        title: 'Projects',
+        color: '#6366f1',
+        board_id: 'board-ops',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('ops-task', i + 1),
+          title: d.dealTitle,
+          status: i === 0 ? 'In Progress' : 'New',
+          assignee_id: d.assign,
+          start_date: now.toISOString(),
+          end_date: new Date(now.getTime() + (i + 30) * 24 * 60 * 60 * 1000).toISOString(),
+          board_id: 'board-ops',
+          group_id: 'ops-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            owner: d.assign,
+            client: d.customerCompany,
+            service_category: 'Implementation',
+            reviwew: 'Pending',
+            estmated_hours: 160,
+            current_billable_hours: i === 0 ? 24 : 8,
+            hourly_rate: 120,
+            client_cost: i === 0 ? 2880 : 960,
+            notes: 'Kickoff complete',
+            date_added: now.toISOString(),
+            link_to_details: d.salesId,
+            quality_check: 'Scheduled'
+          }
+        }))
+      }
+    ]
+  );
+
+  const financeBoard = mkBoard(
+    'board-finance',
+    'Finance',
+    '#ef4444',
+    [
+      {
+        id: 'fin-g1',
+        title: 'AP/AR',
+        color: '#ef4444',
+        board_id: 'board-finance',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('fin-task', i + 1),
+          title: `${d.customerCompany} Billing`,
+          status: i === 0 ? 'In Progress' : 'New',
+          assignee_id: d.assign,
+          number_field: d.dealValue,
+          due_date: new Date(now.getTime() + (i + 10) * 24 * 60 * 60 * 1000).toISOString(),
+          board_id: 'board-finance',
+          group_id: 'fin-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            person: d.assign,
+            deal_id: d.dealId,
+            product: d.product,
+            contact: d.customerContact,
+            company: d.customerCompany,
+            sales_file: 'proposal.pdf',
+            sales_id: d.salesId,
+            payment_due_date: new Date(now.getTime() + (i + 15) * 24 * 60 * 60 * 1000).toISOString(),
+            purchase_invoices: i === 0 ? 'INV-9001' : 'INV-9002',
+            delivery_note: 'DN-100' + (i + 1),
+            type: i === 0 ? 'Invoice' : 'PO',
+            dropdown: i === 0 ? 'Net 30' : 'Net 15'
+          }
+        }))
+      }
+    ]
+  );
+
+  const contactsBoard = mkBoard(
+    'board-contacts',
+    'Contacts',
+    '#0ea5e9',
+    [
+      {
+        id: 'cont-g1',
+        title: 'Accounts',
+        color: '#0ea5e9',
+        board_id: 'board-contacts',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: deals.map((d, i) => ({
+          id: mkId('cont-task', i + 1),
+          title: d.customerContact,
+          status: i === 0 ? 'In Progress' : 'New',
+          board_id: 'board-contacts',
+          group_id: 'cont-g1',
+          position: i,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+          custom_fields: {
+            email: i === 0 ? 'jane.smith@acme.com' : 'mark@globex.com',
+            accountss: d.customerCompany,
+            deals: d.dealTitle,
+            deals_value: d.dealValue,
+            phone: i === 0 ? '+1 555-0101' : '+1 555-0102',
+            title_role: i === 0 ? 'IT Manager' : 'Operations Lead',
+            type: 'Customer',
+            priority: i === 0 ? 'High' : 'Medium',
+            comments: 'Warm relationship',
+            company: d.customerCompany
+          }
+        }))
+      }
+    ]
+  );
+
+  const hrBoard = mkBoard(
+    'board-hr',
+    'HR',
+    '#14b8a6',
+    [
+      {
+        id: 'hr-g1',
+        title: 'Requests',
+        color: '#14b8a6',
+        board_id: 'board-hr',
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+        tasks: [
+          {
+            id: 'hr-1',
+            title: 'New Laptop Request',
+            status: 'In Progress',
+            assignee_id: 'user-1',
+            due_date: new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+            board_id: 'board-hr',
+            group_id: 'hr-g1',
+            position: 0,
+            created_at: now.toISOString(),
+            updated_at: now.toISOString(),
+            custom_fields: {
+              description: 'MacBook Pro for new developer',
+              created_at_field: now.toISOString(),
+              priority: 'High',
+              assignee: 'user-1',
+              status: 'In Progress',
+              type: 'Procurement',
+              department: 'Engineering'
+            }
+          },
+          {
+            id: 'hr-2',
+            title: 'Annual Leave',
+            status: 'New',
+            assignee_id: 'user-2',
+            due_date: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000).toISOString(),
+            board_id: 'board-hr',
+            group_id: 'hr-g1',
+            position: 1,
+            created_at: now.toISOString(),
+            updated_at: now.toISOString(),
+            custom_fields: {
+              description: '10 days leave request',
+              created_at_field: now.toISOString(),
+              priority: 'Medium',
+              assignee: 'user-2',
+              status: 'Pending',
+              type: 'Leave',
+              department: 'Sales'
+            }
+          }
+        ]
+      }
+    ]
+  );
+
+  return [
+    salesBoard,
+    leadsBoard,
+    activityBoard,
+    purchaseBoard,
+    storeBoard,
+    opsBoard,
+    financeBoard,
+    contactsBoard,
+    hrBoard
+  ];
+};
 
 export function BoardProvider({ children }: { children: ReactNode }) {
   const [boards, setBoards] = useState<Board[]>([]);
   const [currentBoard, setCurrentBoard] = useState<Board | null>(null);
-  const [currentView, setCurrentView] = useState<'table' | 'kanban' | 'dashboard' | 'gantt'>('table');
+  const [currentView, setCurrentView] = useState<'table' | 'kanban' | 'dashboard' | 'gantt'>(() => {
+    const saved = localStorage.getItem('lastView');
+    if (saved === 'table' || saved === 'kanban' || saved === 'dashboard' || saved === 'gantt') return saved;
+    return 'table';
+  });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -205,9 +550,11 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         });
         
         // Use mock data
-        const mockBoard = createMockBoard();
-        setBoards([mockBoard]);
-        setCurrentBoard(mockBoard);
+        const mockBoards = createMockBoards();
+        setBoards(mockBoards);
+        const savedBoardId = localStorage.getItem('lastBoardId');
+        const initialBoard = mockBoards.find(b => b.id === savedBoardId) || mockBoards[0];
+        setCurrentBoard(initialBoard);
         return;
       }
 
@@ -245,7 +592,9 @@ export function BoardProvider({ children }: { children: ReactNode }) {
         });
 
         setBoards(boardsData);
-        setCurrentBoard(boardsData[0]);
+        const savedBoardId = localStorage.getItem('lastBoardId');
+        const initialBoard = boardsData.find((b: any) => b.id === savedBoardId) || boardsData[0];
+        setCurrentBoard(initialBoard);
       } else {
         // Create default board if none exist
         await createBoard("E-Commerce Platform", "Pakistan's leading online marketplace development project");
@@ -1014,8 +1363,12 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       loading,
       setCurrentBoard: (board: Board) => {
         setCurrentBoard(board);
+        try { localStorage.setItem('lastBoardId', board.id); } catch {}
       },
-      setCurrentView,
+      setCurrentView: (view: 'table' | 'kanban' | 'dashboard' | 'gantt') => {
+        setCurrentView(view);
+        try { localStorage.setItem('lastView', view); } catch {}
+      },
       createBoard,
       updateTask,
       addTask,

@@ -13,6 +13,7 @@ import EmailIntegration from "./pages/EmailIntegration";
 import MyWorks from "./pages/MyWorks";
 import Proposals from "./pages/Proposals";
 import Training from "./pages/Training";
+import Notifications from "./pages/Notifications";
 import PrivateRoute from "@/components/auth/PrivateRoute";
 import { GmailAuthCallback } from "@/components/GmailAuthCallback";
 
@@ -48,6 +49,16 @@ const App = () => (
               {/* Main content */}
               <div className="relative z-10 min-h-screen">
                 <BrowserRouter>
+                  {/* Restore last route if available */}
+                  {(() => {
+                    try {
+                      const lastRoute = localStorage.getItem('lastRoute');
+                      if (lastRoute && window.location.pathname === '/') {
+                        window.history.replaceState(null, '', lastRoute);
+                      }
+                    } catch {}
+                    return null;
+                  })()}
                   <Routes>
                     {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
@@ -80,6 +91,13 @@ const App = () => (
                     <Route path="/training" element={
                       <PrivateRoute>
                         <Training />
+                      </PrivateRoute>
+                    } />
+
+                    {/* Notifications Route */}
+                    <Route path="/notifications" element={
+                      <PrivateRoute>
+                        <Notifications />
                       </PrivateRoute>
                     } />
                     

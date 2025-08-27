@@ -3,21 +3,38 @@ import { Star, Users, User, ChevronDown, Clock, Shield, LogOut, Plus, Edit, Chec
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { useBoardContext } from '@/context/BoardContext';
 import { useAuth } from '@/context/AuthContext';
-import { useActivity } from '@/context/ActivityContext';
+// import { useActivity } from '@/context/ActivityContext';
 
 const Header = () => {
   const { currentBoard, currentView, setCurrentView, canEditCurrentBoard } = useBoardContext();
   const { user, signOut } = useAuth();
-  const { getActivitiesForBoard } = useActivity();
+  // const { getActivitiesForBoard } = useActivity();
 
   if (!currentBoard || !user) return null;
 
   const hasEditAccess = canEditCurrentBoard();
   
-  // Get activities for the current board
-  const boardActivities = currentBoard ? getActivitiesForBoard(currentBoard.id) : [];
+  // Mock recent activities with unread/read toggle
+  const [recentActivities, setRecentActivities] = React.useState<Array<{ id: string; message: string; timestamp: string; read: boolean }>>([
+    { id: 'ra-1', message: 'New deal S-1001 created for Acme Corp', timestamp: new Date().toISOString(), read: false },
+    { id: 'ra-2', message: 'Lead converted: Globex → Opportunity', timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(), read: false },
+    { id: 'ra-3', message: 'Purchase invoice INV-9001 approved', timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), read: true }
+  ]);
+  const unreadCount = recentActivities.filter(a => !a.read).length;
+  const markAsRead = (id: string) => setRecentActivities(prev => prev.map(a => a.id === id ? { ...a, read: true } : a));
+
+  // Mock team members (demo only)
+  const teamMembers = [
+    { id: 'tm-1', name: 'Aisha Khan', email: 'aisha@company.com', role: 'Sales', status: 'online' },
+    { id: 'tm-2', name: 'Bilal Ahmed', email: 'bilal@company.com', role: 'Purchase', status: 'away' },
+    { id: 'tm-3', name: 'Fatima Noor', email: 'fatima@company.com', role: 'Operations', status: 'offline' },
+    { id: 'tm-4', name: 'Omar Malik', email: 'omar@company.com', role: 'Finance', status: 'online' },
+    { id: 'tm-5', name: 'Sara Ali', email: 'sara@company.com', role: 'HR', status: 'online' },
+  ];
+  const getInitials = (full: string) => full.split(' ').map(s => s[0]).join('').slice(0, 2).toUpperCase();
 
   const handleSignOut = async () => {
     try {
@@ -114,17 +131,18 @@ const Header = () => {
                   size="sm" 
                   className="interactive-apple apple-card border-border/20 hover:border-border/40 backdrop-blur-sm"
                 >
-                  <Clock className="w-4 h-4 mr-2" />
-                  Activity
+                  <Clock className={`w-4 h-4 mr-2 ${unreadCount > 0 ? 'text-red-600' : 'text-green-600'}`} />
+                  <span className="mr-2">Activity</span>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${unreadCount > 0 ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}>{unreadCount}</span>
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-96 p-0 apple-card border-border/10" align="end">
                 <div className="p-4 border-b border-border/10 bg-gradient-to-r from-blue-50/80 to-purple-50/80 dark:from-blue-900/20 dark:to-purple-900/20">
                   <h3 className="font-semibold text-foreground">Recent Activity</h3>
-                  <p className="text-sm text-muted-foreground">Latest updates on this board</p>
+                  <p className="text-sm text-muted-foreground">Latest updates</p>
                 </div>
                 <div className="max-h-80 overflow-y-auto apple-scrollbar">
-                  {boardActivities.length === 0 ? (
+                  {recentActivities.length === 0 ? (
                     <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
                       <Clock className="w-12 h-12 text-muted-foreground/40 mb-3" />
                       <h4 className="font-medium text-foreground mb-1">No recent activity</h4>
@@ -134,33 +152,7 @@ const Header = () => {
                     </div>
                   ) : (
                     <div className="p-4 space-y-3">
-                      {boardActivities.slice(0, 6).map((activity, index) => {
-                        const getActivityIcon = (type: string) => {
-                          switch (type) {
-                            case 'task_created':
-                              return <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><Plus className="w-4 h-4 text-green-600 dark:text-green-400" /></div>;
-                            case 'task_updated':
-                              return <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center"><Edit className="w-4 h-4 text-blue-600 dark:text-blue-400" /></div>;
-                            case 'task_completed':
-                              return <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center"><CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" /></div>;
-                            default:
-                              return <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-900/30 flex items-center justify-center"><Clock className="w-4 h-4 text-gray-600 dark:text-gray-400" /></div>;
-                          }
-                        };
-
-                        const getActivityMessage = (activity: any) => {
-                          switch (activity.type) {
-                            case 'task_created':
-                              return `New task "${activity.task_title || 'Untitled'}" was created`;
-                            case 'task_updated':
-                              return `Task "${activity.task_title || 'Untitled'}" was updated`;
-                            case 'task_completed':
-                              return `Task "${activity.task_title || 'Untitled'}" was completed`;
-                            default:
-                              return 'Activity recorded';
-                          }
-                        };
-
+                      {recentActivities.slice(0, 8).map((activity) => {
                         const formatTimeAgo = (timestamp: string) => {
                           const now = new Date();
                           const time = new Date(timestamp);
@@ -179,35 +171,34 @@ const Header = () => {
                         return (
                           <div
                             key={activity.id}
-                            className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors border border-transparent hover:border-border/20"
+                            className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors border border-transparent hover:border-border/20 cursor-pointer"
+                            onClick={() => markAsRead(activity.id)}
                           >
                             <div className="flex-shrink-0 mt-0.5">
-                              {getActivityIcon(activity.type)}
+                              <div className={`w-3 h-3 rounded-full ${activity.read ? 'bg-green-500' : 'bg-red-500'}`}></div>
                             </div>
                             
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-foreground font-medium mb-1 leading-relaxed">
-                                {getActivityMessage(activity)}
+                                {activity.message}
                               </p>
                               <div className="flex items-center gap-2">
                                 <span className="text-xs text-muted-foreground">
                                   {formatTimeAgo(activity.timestamp)}
                                 </span>
-                                {activity.user_id && (
-                                  <span className="text-xs px-2 py-1 bg-muted rounded-full text-muted-foreground">
-                                    User {activity.user_id.slice(0, 8)}
-                                  </span>
-                                )}
+                                <span className={`text-xs px-2 py-1 rounded-full ${activity.read ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'}`}>
+                                  {activity.read ? 'Read' : 'Unread'}
+                                </span>
                               </div>
                             </div>
                           </div>
                         );
                       })}
                       
-                      {boardActivities.length > 6 && (
+                      {recentActivities.length > 8 && (
                         <div className="text-center pt-2 border-t border-border/10">
                           <button className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                            View all {boardActivities.length} activities
+                            View all {recentActivities.length} activities
                           </button>
                         </div>
                       )}
@@ -217,15 +208,49 @@ const Header = () => {
               </PopoverContent>
             </Popover>
             
-            {/* Team Button */}
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="interactive-apple apple-card border-border/20 hover:border-border/40 backdrop-blur-sm"
-            >
-              <Users className="w-4 h-4 mr-2" />
-              Team
-            </Button>
+            {/* Team Button with popover (mock data) */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="interactive-apple apple-card border-border/20 hover:border-border/40 backdrop-blur-sm"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Team
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-96 p-0 apple-card border-border/10" align="end">
+                <div className="p-4 border-b border-border/10 bg-gradient-to-r from-green-50/80 to-blue-50/80 dark:from-green-900/20 dark:to-blue-900/20">
+                  <h3 className="font-semibold text-foreground">Team Members</h3>
+                  <p className="text-sm text-muted-foreground">People in your workspace</p>
+                </div>
+                <div className="max-h-80 overflow-y-auto apple-scrollbar p-2">
+                  {teamMembers.map((m) => (
+                    <div key={m.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors">
+                      <div className="relative">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback>{getInitials(m.name)}</AvatarFallback>
+                        </Avatar>
+                        <span className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${m.status === 'online' ? 'bg-green-500' : m.status === 'away' ? 'bg-yellow-500' : 'bg-gray-400'}`}></span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-sm truncate">{m.name}</span>
+                          <Badge variant="outline" className="text-xs">{m.role}</Badge>
+                        </div>
+                        <div className="text-xs text-muted-foreground truncate">{m.email}</div>
+                      </div>
+                      <div>
+                        <span className={`text-xs px-2 py-1 rounded-full ${m.status === 'online' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : m.status === 'away' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' : 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-300'}`}>
+                          {m.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {/* Profile Button with User Info */}
             <Popover>

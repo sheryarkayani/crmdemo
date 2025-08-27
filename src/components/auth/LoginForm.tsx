@@ -114,9 +114,6 @@ const LoginForm = () => {
                     required
                     disabled={isLoading}
                   />
-                  <div className={`absolute left-4 top-0 h-full w-1 rounded-full transition-all duration-300 ${
-                    focusedField === 'email' ? 'bg-red-500 opacity-100' : 'bg-transparent opacity-0'
-                  }`}></div>
                 </div>
               </div>
 
@@ -157,9 +154,6 @@ const LoginForm = () => {
                       <Eye className="w-5 h-5 text-muted-foreground" />
                     )}
                   </Button>
-                  <div className={`absolute left-4 top-0 h-full w-1 rounded-full transition-all duration-300 ${
-                    focusedField === 'password' ? 'bg-red-500 opacity-100' : 'bg-transparent opacity-0'
-                  }`}></div>
                 </div>
               </div>
 

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useBoardContext } from '@/context/BoardContext';
 import { useAuth } from '@/context/AuthContext';
 import { useUserContext } from '@/context/UserContext';
@@ -19,10 +20,36 @@ const Sidebar = () => {
   const location = useLocation();
   const [searchTerm, setSearchTerm] = React.useState('');
 
-  const filteredBoards = boards.filter(board =>
-    board.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    board.description?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Mock notifications (demo-only)
+  const [notifications, setNotifications] = React.useState<Array<{ id: string; title: string; message: string; timestamp: string; read: boolean; type: 'info' | 'warning' | 'success' }>>([
+    { id: 'n-1', title: 'Proposal Sent', message: 'Proposal for Acme Corp has been emailed.', timestamp: new Date().toISOString(), read: false, type: 'success' },
+    { id: 'n-2', title: 'Payment Due', message: 'Invoice INV-9001 is due in 3 days.', timestamp: new Date(Date.now() - 60 * 60 * 1000).toISOString(), read: false, type: 'warning' },
+    { id: 'n-3', title: 'New Lead', message: 'New lead from Globex added to pipeline.', timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), read: true, type: 'info' }
+  ]);
+  const unreadNotifications = notifications.filter(n => !n.read).length;
+  const markNotificationRead = (id: string) => setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  const markAllNotificationsRead = () => setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  const formatTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffInMs = now.getTime() - time.getTime();
+    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInDays < 7) return `${diffInDays}d ago`;
+    return time.toLocaleDateString();
+  };
+
+  const allowedBoards = ['sales', 'leads', 'activity', 'purchase', 'store', 'ops', 'finance', 'contacts', 'hr'];
+  const filteredBoards = boards
+    .filter(board => allowedBoards.some(ab => board.title.toLowerCase().includes(ab)))
+    .filter(board =>
+      board.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      board.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   const getBoardAccessLevel = (board: any) => {
     if (!user) return 'none';
@@ -97,9 +124,8 @@ const Sidebar = () => {
       id: 'notifications', 
       label: 'Notifications', 
       icon: Bell, 
-      active: false, 
-      badge: '3',
-      onClick: () => {} // TODO: Implement notifications
+      active: location.pathname === '/notifications', 
+      onClick: () => navigate('/notifications')
     },
   ];
 
@@ -143,6 +169,32 @@ const Sidebar = () => {
         <div className="space-y-2">
           {navigationItems.map((item) => {
             const IconComponent = item.icon;
+            if (item.id === 'notifications') {
+              return (
+                <div
+                  key={item.id}
+                  onClick={item.onClick}
+                  className={`
+                    group flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 relative overflow-hidden
+                    ${item.active 
+                      ? 'bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-800/30 text-red-700 dark:text-red-300 shadow-md border border-red-200/50 dark:border-red-700/50' 
+                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-100 hover:shadow-sm'
+                    }
+                  `}
+                >
+                  {item.active && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 dark:from-red-400/10 dark:to-orange-400/10"></div>
+                  )}
+                  <div className="flex items-center gap-3 relative z-10">
+                    <IconComponent className={`w-5 h-5 transition-transform duration-200 ${item.active ? 'scale-110' : 'group-hover:scale-105'} ${unreadNotifications > 0 ? 'text-red-600' : ''}`} />
+                    <span className="text-sm font-semibold">{item.label}</span>
+                  </div>
+                  <Badge className={`${unreadNotifications > 0 ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'} text-white text-xs px-2 py-1 min-w-[20px] h-6 rounded-full shadow-sm relative z-10`}>
+                    {unreadNotifications}
+                  </Badge>
+                </div>
+              );
+            }
             return (
               <div
                 key={item.id}
