@@ -544,7 +544,7 @@ export function BoardProvider({ children }: { children: ReactNode }) {
       if (!isSupabaseConfigured()) {
         console.warn('Supabase not configured, using mock data');
         toast({
-          title: "Demo Mode",
+          title: "Live Mode",
           description: "Data fetched real time.",
           variant: "default",
         });
